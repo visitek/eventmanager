@@ -1,4 +1,4 @@
-eventmanager
+jQuery EventManager
 ============
 
 jQuery eventmanager plugin
