@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="./../eventmanager.js"></script>
+	<title>tests</title>
+</head>
+<body>
+<script>
+	function hello(arg1, arg2, arg3){
+		console.log(arg1 + arg2 + arg3);
+	}
+	$.EventManager.attach('test', hello);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, false, 'Tag1');
+	$.EventManager.attach('test', hello, true,
+			[
+				'Tag2'
+			]);
+	$.EventManager.attach('test', hello, false,
+			[
+				'Tag2'
+			]);
+	$.EventManager.attach('test', hello, false,
+			[
+				'Tag1',
+				'Tag2'
+			]);
+
+	$.EventManager.trigger('test', 'All', ' events', '!');
+	$.EventManager.trigger('test', 'Without all once', ' events', '!');
+
+	$.EventManager.detachByTag('Tag1');
+	$.EventManager.trigger('test', 'Without Tag1', ' events', '!');
+
+	$.EventManager.detachByTags(
+			[
+				'Tag2'
+			]);
+	$.EventManager.trigger('test', 'Without Tag2', ' events', '!');
+
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+
+	$.EventManager.detachAllOnce(/^test$/i);
+
+	$.EventManager.trigger('test', 'Without all once', ' events', '!');
+
+</script>
+</body>
+</html>

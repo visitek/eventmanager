@@ -51,6 +51,7 @@
 		 */
 		this.trigger = function(event){
 			if(typeof(listeners[event]) != 'undefined'){
+				detach = [];
 				for(var item in listeners[event]){
 					try {
 						var args =
@@ -64,12 +65,16 @@
 						}
 						listeners[event][item].callback.apply(undefined, args);
 						if(listeners[event][item].once){
-							_detach(event, item);
+							detach[detach.length] = item;
 						}
 					}
 					catch(e){
 						eventmanager.trigger('EventManager:error', {err : e, event : event});
 					}
+				}
+				detach = detach.reverse();
+				for(var i in detach){
+					_detach(event, detach[i]);
 				}
 			}
 		};
@@ -79,17 +84,22 @@
 		 * @param mixed preg Reg expression
 		 */
 		this.detachAllOnce = function(preg){
+			detach = [];
 			for(var event in listeners){
 				for(var o in listeners[event]){
 					if(listeners[event][o].once){
 						if(typeof(preg) == 'undefined'){
-							_detach(event, o);
+							detach[detach.length] = o;
 						}
 						else if((new RegExp(preg)).test(event)){
-							_detach(event, o);
+							detach[detach.length] = o;
 						}
 					}
 				}
+			}
+			detach = detach.reverse();
+			for(var i in detach){
+				_detach(event, detach[i]);
 			}
 		};
 
@@ -99,24 +109,29 @@
 		 * @param string tag
 		 */
 		this.detachAllOnceByTag = function(tag){
+			detach = [];
 			for(var event in listeners){
 				for(var o in listeners[event]){
 					if(listeners[event][o].once){
 						if(typeof(listeners[event][o].tag) == 'string'){
 							if(listeners[event][o].tag == tag){
-								_detach(event, o);
+								detach[detach.length] = o;
 							}
 						}
 						else if(typeof(listeners[event][o].tag) == 'object'){
 							for(var tg in listeners[event][o].tag){
 								if(listeners[event][o].tag[tg] == tag){
-									_detach(event, o);
+									detach[detach.length] = o;
 									break;
 								}
 							}
 						}
 					}
 				}
+			}
+			detach = detach.reverse();
+			for(var i in detach){
+				_detach(event, detach[i]);
 			}
 		};
 
@@ -137,22 +152,27 @@
 		 * @param string tag
 		 */
 		this.detachByTag = function(tag){
+			detach = [];
 			for(var event in listeners){
 				for(var o in listeners[event]){
 					if(typeof(listeners[event][o].tag) == 'string'){
 						if(listeners[event][o].tag == tag){
-							_detach(event, o);
+							detach[detach.length] = o;
 						}
 					}
 					else if(typeof(listeners[event][o].tag) == 'object'){
 						for(var tg in listeners[event][o].tag){
 							if(listeners[event][o].tag[tg] == tag){
-								_detach(event, o);
+								detach[detach.length] = o;
 								break;
 							}
 						}
 					}
 				}
+			}
+			detach = detach.reverse();
+			for(var i in detach){
+				_detach(event, detach[i]);
 			}
 		};
 
