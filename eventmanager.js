@@ -150,7 +150,7 @@
 		 */
 		this.detachByTags = function(tags){
 			for(var tag in tags){
-				_detachByTag(tags[tag]);
+				eventmanager.detachByTag(tags[tag]);
 			}
 		};
 
