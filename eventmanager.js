@@ -1,3 +1,8 @@
+/**
+ * jQuery EventManager
+ * @author Martin Lonsky (visitek@gmail.com)
+ * @link https://github.com/visitek/eventmanager
+ */
 (function($){
 	$.EventManager = function(){
 		var eventmanager = this;
