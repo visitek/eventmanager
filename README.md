@@ -33,11 +33,11 @@ Detach event
 
 You can detach all once triggable events with or without regex (matching EventId)
 
-	$.EventManager.detachAllOnce([, string RegExpression]);
 	$.EventManager.detachAllOnceByTag(string|array Tag);
+	$.EventManager.detachAllOnce([, string RegExpression]);
 
 	=> example
 
+	$.EventManager.detachAllOnceByTag('Group1');
 	$.EventManager.detachAllOnce();
 	$.EventManager.detachAllOnce(^(.(!?Group))*$);
-	$.EventManager.detachAllOnceByTag('Group1');
