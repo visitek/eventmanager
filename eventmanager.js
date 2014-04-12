@@ -125,7 +125,7 @@
 		 * Detach all once triggable events by tags
 		 * @param array tags
 		 */
-		this.detachAllOnceByTaga = function(tags){
+		this.detachAllOnceByTags = function(tags){
 			for(var tag in tags){
 				eventmanager.detachAllOnceByTag(tags[tag]);
 			}
