@@ -38,9 +38,11 @@
 		 * @param offset item
 		 */
 		var _detach = function(event, item){
-			listeners[event].splice(item, 1);
-			if(listeners[event].length == 0){
-				delete(listeners[event]);
+			if(typeof(listeners[event]) != 'undefined'){
+				listeners[event].splice(item, 1);
+				if(listeners[event].length == 0){
+					delete(listeners[event]);
+				}
 			}
 		};
 
@@ -51,7 +53,7 @@
 		 */
 		this.trigger = function(event){
 			if(typeof(listeners[event]) != 'undefined'){
-				detach = [];
+				var detach = [];
 				for(var item in listeners[event]){
 					try {
 						var args =
@@ -85,7 +87,7 @@
 		 */
 		this.detachAllOnce = function(preg){
 			for(var event in listeners){
-				detach = [];
+				var detach = [];
 				for(var o in listeners[event]){
 					if(listeners[event][o].once){
 						if(typeof(preg) == 'undefined'){
@@ -110,7 +112,7 @@
 		 */
 		this.detachAllOnceByTag = function(tag){
 			for(var event in listeners){
-				detach = [];
+				var detach = [];
 				for(var o in listeners[event]){
 					if(listeners[event][o].once){
 						if(typeof(listeners[event][o].tag) == 'string'){
@@ -153,7 +155,7 @@
 		 */
 		this.detachByTag = function(tag){
 			for(var event in listeners){
-				detach = [];
+				var detach = [];
 				for(var o in listeners[event]){
 					if(typeof(listeners[event][o].tag) == 'string'){
 						if(listeners[event][o].tag == tag){
