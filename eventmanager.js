@@ -55,11 +55,8 @@
 						if(typeof(preg) == 'undefined'){
 							eventmanager.detach(event, o);
 						}
-						else{
-							regex = new RegExp(preg);
-							if(regex.test(event)){
-								eventmanager.detach(event, o);
-							}
+						else if((new RegExp(preg)).test(event)){
+							eventmanager.detach(event, o);
 						}
 					}
 				}
