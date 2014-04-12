@@ -4,7 +4,7 @@ jQuery eventmanager plugin
 
 Attach event
 --------
-	$.EventManager.attach(string EventId, function Callback [, bool OnlyOnce [, string|array Tags]]);
+	$.EventManager.attach(string EventId, function Callback [, bool OnlyOnce [, string|array Tag]]);
 
 	=> example
 
@@ -32,6 +32,10 @@ Detach event
 	$.EventManager.detachByTags(['Group1', 'Group2']);
 
 You can detach all once triggable events with or without regex (matching EventId)
+	$.EventManager.detachAllOnce([, string RegExpression]);
+	$.EventManager.detachAllOnceByTag(string|array Tag);
+
+	=> example
 
 	$.EventManager.detachAllOnce();
 	$.EventManager.detachAllOnce(^(.(!?Group))*$);
