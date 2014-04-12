@@ -48,18 +48,26 @@
 		/**
 		 * Trigger event
 		 * @param string event
-		 * @param mixed obj callback param
 		 */
-		this.trigger = function(event, obj){
+		this.trigger = function(event){
 			if(typeof(listeners[event]) != 'undefined'){
 				var del =
 					[
 					];
 				for(var item in listeners[event]){
 					try {
-						listeners[event][item].callback(obj, event);
+						var args =
+							[
+							];
+						for(var arg in arguments){
+							if(arg == 0){
+								continue;
+							}
+							args[args.length] = arguments[arg];
+						}
+						listeners[event][item].callback.apply(undefined, args);
 						if(listeners[event][item].once){
-							del[del.length] = item;
+							_detach(event, item);
 						}
 					}
 					catch(e){

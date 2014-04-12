@@ -21,7 +21,7 @@ Next attached event will be triggered only once and then will be detached automa
 
 Trigger event
 --------
-	$.EventManager.trigger(string EventId [, mixed callbackparam]);
+	$.EventManager.trigger(string EventId [, mixed callbackparam1 [, mixed callbackparam2] ... ]);
 
 	=> example
 
