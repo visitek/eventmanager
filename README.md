@@ -4,7 +4,7 @@ jQuery eventmanager plugin
 
 Attach event
 --------
-	$.EventManager.attach(string EventId, function Callback [, bool OlnlyOnce, string|array Tags]);
+	$.EventManager.attach(string EventId, function Callback [, bool OlnlyOnce [, string|array Tags]]);
 	=>
 	$.EventManager.attach('test', function(callbackparam){
 		//callback body
