@@ -42,27 +42,28 @@
 	$.EventManager.attach('test', hello, true);
 	$.EventManager.attach('test', hello, true);
 	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
-	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('tst', hello, true);
 
 	$.EventManager.detachAllOnce(/^test$/i);
 
-	$.EventManager.trigger('test', 'Without all once', ' events', '!');
+	$.EventManager.trigger('test', 'Without all once regex', ' events', '!');
+
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+	$.EventManager.attach('test', hello, true);
+
+	$.EventManager.detachAllOnce();
+
+	$.EventManager.attach('test', hello, true,
+			[
+				'Tag1'
+			]);
+
+	$.EventManager.detachAllOnceByTags(
+			[
+				'Tag1'
+			]);
 
 </script>
 </body>

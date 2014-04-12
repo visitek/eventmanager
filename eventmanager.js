@@ -84,8 +84,8 @@
 		 * @param mixed preg Reg expression
 		 */
 		this.detachAllOnce = function(preg){
-			detach = [];
 			for(var event in listeners){
+				detach = [];
 				for(var o in listeners[event]){
 					if(listeners[event][o].once){
 						if(typeof(preg) == 'undefined'){
@@ -96,10 +96,10 @@
 						}
 					}
 				}
-			}
-			detach = detach.reverse();
-			for(var i in detach){
-				_detach(event, detach[i]);
+				detach = detach.reverse();
+				for(var i in detach){
+					_detach(event, detach[i]);
+				}
 			}
 		};
 
@@ -109,8 +109,8 @@
 		 * @param string tag
 		 */
 		this.detachAllOnceByTag = function(tag){
-			detach = [];
 			for(var event in listeners){
+				detach = [];
 				for(var o in listeners[event]){
 					if(listeners[event][o].once){
 						if(typeof(listeners[event][o].tag) == 'string'){
@@ -128,10 +128,10 @@
 						}
 					}
 				}
-			}
-			detach = detach.reverse();
-			for(var i in detach){
-				_detach(event, detach[i]);
+				detach = detach.reverse();
+				for(var i in detach){
+					_detach(event, detach[i]);
+				}
 			}
 		};
 
@@ -152,8 +152,8 @@
 		 * @param string tag
 		 */
 		this.detachByTag = function(tag){
-			detach = [];
 			for(var event in listeners){
+				detach = [];
 				for(var o in listeners[event]){
 					if(typeof(listeners[event][o].tag) == 'string'){
 						if(listeners[event][o].tag == tag){
@@ -169,10 +169,10 @@
 						}
 					}
 				}
-			}
-			detach = detach.reverse();
-			for(var i in detach){
-				_detach(event, detach[i]);
+				detach = detach.reverse();
+				for(var i in detach){
+					_detach(event, detach[i]);
+				}
 			}
 		};
 
