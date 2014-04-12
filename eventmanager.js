@@ -51,9 +51,6 @@
 		 */
 		this.trigger = function(event){
 			if(typeof(listeners[event]) != 'undefined'){
-				var del =
-					[
-					];
 				for(var item in listeners[event]){
 					try {
 						var args =
@@ -73,9 +70,6 @@
 					catch(e){
 						eventmanager.trigger('EventManager:error', {err : e, event : event});
 					}
-				}
-				for(var d in del){
-					_detach(event, del[d]);
 				}
 			}
 		};
