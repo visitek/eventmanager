@@ -19,6 +19,9 @@
 
 		this.detach = function(event, item){
 			listeners[event].splice(item, 1);
+			if(listeners[event].length == 0){
+				delete(listeners[event]);
+			}
 		};
 
 
