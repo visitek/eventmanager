@@ -4,10 +4,20 @@
  * @link https://github.com/visitek/eventmanager
  */
 (function($){
+	/**
+	 * Event manager object
+	 */
 	$.EventManager = function(){
 		var eventmanager = this;
 		var listeners = {};
 
+		/**
+		 * Attach event
+		 * @param string event
+		 * @param function callback
+		 * @param bool once
+		 * @param string|array tag
+		 */
 		this.attach = function(event, callback, once, tag){
 			if(typeof(listeners[event]) == 'undefined'){
 				listeners[event] =
@@ -22,7 +32,12 @@
 		};
 
 
-		this.detach = function(event, item){
+		/**
+		 * detach
+		 * @param string event
+		 * @param offset item
+		 */
+		var _detach = function(event, item){
 			listeners[event].splice(item, 1);
 			if(listeners[event].length == 0){
 				delete(listeners[event]);
@@ -30,6 +45,11 @@
 		};
 
 
+		/**
+		 * Trigger event
+		 * @param string event
+		 * @param mixed obj callback param
+		 */
 		this.trigger = function(event, obj){
 			if(typeof(listeners[event]) != 'undefined'){
 				var del =
@@ -47,21 +67,24 @@
 					}
 				}
 				for(var d in del){
-					eventmanager.detach(event, del[d]);
+					_detach(event, del[d]);
 				}
 			}
 		};
 
-
+		/**
+		 * Detach all once triggable events
+		 * @param mixed preg Reg expression
+		 */
 		this.detachAllOnce = function(preg){
 			for(var event in listeners){
 				for(var o in listeners[event]){
 					if(listeners[event][o].once){
 						if(typeof(preg) == 'undefined'){
-							eventmanager.detach(event, o);
+							_detach(event, o);
 						}
 						else if((new RegExp(preg)).test(event)){
-							eventmanager.detach(event, o);
+							_detach(event, o);
 						}
 					}
 				}
@@ -69,18 +92,22 @@
 		};
 
 
+		/**
+		 * Detach by tag
+		 * @param string tag
+		 */
 		this.detachByTag = function(tag){
 			for(var event in listeners){
 				for(var o in listeners[event]){
 					if(typeof(listeners[event][o].tag) == 'string'){
 						if(listeners[event][o].tag == tag){
-							eventmanager.detach(event, o);
+							_detach(event, o);
 						}
 					}
 					else if(typeof(listeners[event][o].tag) == 'object'){
 						for(var tg in listeners[event][o].tag){
 							if(listeners[event][o].tag[tg] == tag){
-								eventmanager.detach(event, o);
+								_detach(event, o);
 								break;
 							}
 						}
@@ -90,9 +117,13 @@
 		};
 
 
+		/**
+		 * Detach by tags
+		 * @param array tags
+		 */
 		this.detachByTags = function(tags){
 			for(var tag in tags){
-				eventmanager.detachByTag(tags[tag]);
+				_detachByTag(tags[tag]);
 			}
 		};
 
