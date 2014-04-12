@@ -5,7 +5,9 @@ jQuery eventmanager plugin
 Attach event
 --------
 	$.EventManager.attach(string EventId, function Callback [, bool OlnlyOnce [, string|array Tags]]);
-	=>
+
+	=> example
+
 	$.EventManager.attach('test', function(callbackparam){
 		//callback body
 		console.log(callbackparam.id);
@@ -14,14 +16,18 @@ Attach event
 Trigger event
 --------
 	$.EventManager.trigger(string EventId [, mixed callbackparam]);
-	=>
+
+	=> example
+
 	$.EventManager.trigger('test', {id: 'It works!'});
 
 Detach event
 --------
 	$.EventManager.detachByTag(string Tag);
 	$.EventManager.detachByTags(array Tags);
-	=>
+
+	=> example
+
 	$.EventManager.detachByTag('Group1');
 	$.EventManager.detachByTags(['Group1', 'Group2']);
 
