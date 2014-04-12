@@ -35,7 +35,7 @@
 						}
 					}
 					catch(e){
-						eventmanager.trigger('EventManager:error', e);
+						eventmanager.trigger('EventManager:error', {err : e, event : event});
 					}
 				}
 				for(var d in del){
