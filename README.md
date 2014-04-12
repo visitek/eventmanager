@@ -25,7 +25,7 @@ Detach event
 	$.EventManager.detachByTag('Group1');
 	$.EventManager.detachByTags(['Group1', 'Group2']);
 
-You can detach all once events with or without regex (matching EventId)
+You can detach all once triggable events with or without regex (matching EventId)
 
 	$.EventManager.detachAllOnce();
 	$.EventManager.detachAllOnce(^(.(!?Group))*$);
