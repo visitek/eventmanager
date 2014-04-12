@@ -28,4 +28,4 @@ Detach event
 You can detach all once events with or without regex (matching EventId)
 
 	$.EventManager.detachAllOnce();
-	$.EventManager.detachAllOnce(^(.(!?Group)*)$);
+	$.EventManager.detachAllOnce(^(.(!?Group))*$);
