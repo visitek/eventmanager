@@ -93,8 +93,8 @@
 
 
 		/**
-		 * Detach all once triggable events by tags
-		 * @param string|array tag
+		 * Detach all once triggable events by tag
+		 * @param string tag
 		 */
 		this.detachAllOnceByTag = function(tag){
 			for(var event in listeners){
@@ -115,6 +115,17 @@
 						}
 					}
 				}
+			}
+		};
+
+
+		/**
+		 * Detach all once triggable events by tags
+		 * @param array tags
+		 */
+		this.detachAllOnceByTaga = function(tags){
+			for(var tag in tags){
+				eventmanager.detachAllOnceByTag(tags[tag]);
 			}
 		};
 
