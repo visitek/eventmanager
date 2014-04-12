@@ -1,0 +1,4 @@
+eventmanager
+============
+
+jQuery eventmanager plugin
