@@ -13,6 +13,12 @@ Attach event
 		console.log(callbackparam.id);
 	}, false, ['Group1', 'Group2']);
 
+Next attached event will be triggered only once and then will be detached automatically
+
+	$.EventManager.attach('test', function(){
+    	//callback body
+    }, true);
+
 Trigger event
 --------
 	$.EventManager.trigger(string EventId [, mixed callbackparam]);
