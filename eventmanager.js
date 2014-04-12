@@ -93,6 +93,33 @@
 
 
 		/**
+		 * Detach all once triggable events by tags
+		 * @param string|array tag
+		 */
+		this.detachAllOnceByTag = function(tag){
+			for(var event in listeners){
+				for(var o in listeners[event]){
+					if(listeners[event][o].once){
+						if(typeof(listeners[event][o].tag) == 'string'){
+							if(listeners[event][o].tag == tag){
+								_detach(event, o);
+							}
+						}
+						else if(typeof(listeners[event][o].tag) == 'object'){
+							for(var tg in listeners[event][o].tag){
+								if(listeners[event][o].tag[tg] == tag){
+									_detach(event, o);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		};
+
+
+		/**
 		 * Detach by tag
 		 * @param string tag
 		 */
