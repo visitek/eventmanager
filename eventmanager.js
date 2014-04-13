@@ -38,12 +38,7 @@
 		 * @param offset item
 		 */
 		var _detach = function(event, item){
-			if(typeof(listeners[event]) != 'undefined'){
-				listeners[event].splice(item, 1);
-				if(listeners[event].length == 0){
-					delete(listeners[event]);
-				}
-			}
+			listeners[event].splice(item, 1);
 		};
 
 
@@ -78,6 +73,9 @@
 				for(var i in detach){
 					_detach(event, detach[i]);
 				}
+				if(listeners[event].length == 0){
+					delete(listeners[event]);
+				}
 			}
 		};
 
@@ -86,6 +84,7 @@
 		 * @param mixed preg Reg expression
 		 */
 		this.detachAllOnce = function(preg){
+			eventsdel = [];
 			for(var event in listeners){
 				var detach = [];
 				for(var o in listeners[event]){
@@ -102,6 +101,12 @@
 				for(var i in detach){
 					_detach(event, detach[i]);
 				}
+				if(listeners[event].length == 0){
+					eventsdel[eventsdel.length] = event;
+				}
+			}
+			for(var e in eventsdel){
+				delete(eventsdel[e]);
 			}
 		};
 
@@ -111,6 +116,7 @@
 		 * @param string tag
 		 */
 		this.detachAllOnceByTag = function(tag){
+			eventsdel = [];
 			for(var event in listeners){
 				var detach = [];
 				for(var o in listeners[event]){
@@ -134,6 +140,12 @@
 				for(var i in detach){
 					_detach(event, detach[i]);
 				}
+				if(listeners[event].length == 0){
+					eventsdel[eventsdel.length] = event;
+				}
+			}
+			for(var e in eventsdel){
+				delete(eventsdel[e]);
 			}
 		};
 
@@ -154,6 +166,7 @@
 		 * @param string tag
 		 */
 		this.detachByTag = function(tag){
+			eventsdel = [];
 			for(var event in listeners){
 				var detach = [];
 				for(var o in listeners[event]){
@@ -175,6 +188,12 @@
 				for(var i in detach){
 					_detach(event, detach[i]);
 				}
+				if(listeners[event].length == 0){
+					eventsdel[eventsdel.length] = event;
+				}
+			}
+			for(var e in eventsdel){
+				delete(eventsdel[e]);
 			}
 		};
 
