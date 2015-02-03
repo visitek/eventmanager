@@ -8,18 +8,22 @@ var EventManager = function(){
 	 * @param function callback
 	 * @param bool once
 	 * @param string|array tag
+	 * @param int priority
 	 */
-	this.attach = function(event, callback, once, tag){
+	this.attach = function(event, callback, once, tag, priority){
 		if(typeof(listeners[event]) == 'undefined'){
 			listeners[event] =
-				[
-				];
+				[];
 		}
 		listeners[event][listeners[event].length] = {
 			callback : callback,
 			once     : typeof(once) != 'undefined' ? once : false,
-			tag      : typeof(tag) != 'undefined' ? tag : false
+			tag      : typeof(tag) != 'undefined' ? tag : false,
+			priority : typeof(tag) != 'undefined' ? priority : 0
 		};
+		listeners[event].sort(function(a, b){
+			return a.priority - b.priority;
+		});
 	};
 
 
@@ -40,13 +44,11 @@ var EventManager = function(){
 	this.trigger = function(event){
 		if(typeof(listeners[event]) != 'undefined'){
 			var detach =
-				[
-				];
+				[];
 			for(var item in listeners[event]){
 				try {
 					var args =
-						[
-						];
+						[];
 					for(var arg in arguments){
 						if(arg == 0){
 							continue;
@@ -78,12 +80,10 @@ var EventManager = function(){
 	 */
 	this.detachAllOnce = function(preg){
 		eventsdel =
-			[
-			];
+			[];
 		for(var event in listeners){
 			var detach =
-				[
-				];
+				[];
 			for(var o in listeners[event]){
 				if(listeners[event][o].once){
 					if(typeof(preg) == 'undefined'){
@@ -114,12 +114,10 @@ var EventManager = function(){
 	 */
 	this.detachAllOnceByTag = function(tag){
 		eventsdel =
-			[
-			];
+			[];
 		for(var event in listeners){
 			var detach =
-				[
-				];
+				[];
 			for(var o in listeners[event]){
 				if(listeners[event][o].once){
 					if(typeof(listeners[event][o].tag) == 'string'){
@@ -168,12 +166,10 @@ var EventManager = function(){
 	 */
 	this.detachByTag = function(tag){
 		eventsdel =
-			[
-			];
+			[];
 		for(var event in listeners){
 			var detach =
-				[
-				];
+				[];
 			for(var o in listeners[event]){
 				if(typeof(listeners[event][o].tag) == 'string'){
 					if(listeners[event][o].tag == tag){

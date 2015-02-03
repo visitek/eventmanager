@@ -13,6 +13,7 @@ var EventManager = function(){
 	 * @param function callback
 	 * @param bool once
 	 * @param string|array tag
+	 * @param int priority
 	 */
 	this.attach = function(event, callback, once, tag, priority){
 		if(typeof(listeners[event]) == 'undefined'){
