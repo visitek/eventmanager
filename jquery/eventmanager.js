@@ -27,7 +27,7 @@ var EventManager = function(){
 			priority : typeof(tag) != 'undefined' ? priority : 0
 		};
 		listeners[event].sort(function(a, b){
-			return a.priority - b.priority;
+			return b.priority - a.priority;
 		});
 	};
 
