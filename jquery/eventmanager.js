@@ -34,13 +34,13 @@ var EventManager = function(){
 			callback : callback,
 			once     : typeof(once) != 'undefined' ? once : false,
 			tag      : typeof(tag) != 'undefined' ? tag : false,
-			priority : typeof(tag) != 'undefined' ? priority : 0
+			priority : typeof(priority) != 'undefined' ? priority : 0
 		};
 		listeners[event].sort(function(a, b){
 			return b.priority - a.priority;
 		});
 		if(debug){
-			console.log('attached:' + event + '(' + once + ', ' + priority + ')');
+			console.log('attached:' + event + '(' + callback.toString().length + ', ' + once + ', ' + priority + ')');
 		}
 	};
 
@@ -76,10 +76,10 @@ var EventManager = function(){
 						}
 						args[args.length] = arguments[arg];
 					}
-					listeners[event][item].callback.apply(undefined, args);
 					if(debug){
-						console.log('triggered:' + event);
+						console.log('trigger:' + event + '(' + listeners[event][item].callback.toString().length + ')');
 					}
+					listeners[event][item].callback.apply(undefined, args);
 					if(listeners[event][item].once){
 						detach[detach.length] = item;
 					}
