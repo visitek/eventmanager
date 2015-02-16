@@ -6,6 +6,16 @@
 var EventManager = function(){
 	var eventmanager = this;
 	var listeners = {};
+	var debug = false;
+
+
+	/**
+	 * Start debugging
+	 */
+	this.debug = function(){
+		debug = true;
+	};
+
 
 	/**
 	 * Attach event
@@ -29,6 +39,9 @@ var EventManager = function(){
 		listeners[event].sort(function(a, b){
 			return b.priority - a.priority;
 		});
+		if(debug){
+			console.log('attached:' + event + '(' + once + ', ' + priority + ')');
+		}
 	};
 
 
@@ -39,6 +52,9 @@ var EventManager = function(){
 	 */
 	var _detach = function(event, item){
 		listeners[event].splice(item, 1);
+		if(debug){
+			console.log('detached:' + event);
+		}
 	};
 
 
@@ -61,6 +77,9 @@ var EventManager = function(){
 						args[args.length] = arguments[arg];
 					}
 					listeners[event][item].callback.apply(undefined, args);
+					if(debug){
+						console.log('triggered:' + event);
+					}
 					if(listeners[event][item].once){
 						detach[detach.length] = item;
 					}
