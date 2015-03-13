@@ -5,7 +5,7 @@
  */
 var EventManager = (function($){
 	'use strict';
-	var eventmanager = this;
+	var eventmanager = {};
 	var listeners = {};
 	var debug = false;
 
@@ -13,7 +13,7 @@ var EventManager = (function($){
 	/**
 	 * Start debugging
 	 */
-	this.debug = function(){
+	eventmanager.debug = function(){
 		debug = true;
 	};
 
@@ -27,7 +27,7 @@ var EventManager = (function($){
 	 * @param priority
 	 * @param stop_propagation
 	 */
-	this.attach = function(event, callback, once, tag, priority, stop_propagation){
+	eventmanager.attach = function(event, callback, once, tag, priority, stop_propagation){
 		var singleton = false;
 		if(typeof callback === 'object'){
 			once = callback.once;
@@ -85,7 +85,7 @@ var EventManager = (function($){
 	 * Trigger event
 	 * @param event
 	 */
-	this.trigger = function(event){
+	eventmanager.trigger = function(event){
 		if(listeners[event] !== undefined){
 			if(debug){
 				console.log('trigger:' + event);
@@ -151,7 +151,7 @@ var EventManager = (function($){
 	 * Detach all once triggable events
 	 * @param preg
 	 */
-	this.detachAllOnce = function(preg){
+	eventmanager.detachAllOnce = function(preg){
 		var eventsdel =
 			[];
 		var detach, event, o, i;
@@ -187,7 +187,7 @@ var EventManager = (function($){
 	 * Detach all once triggable events by tag
 	 * @param tag
 	 */
-	this.detachAllOnceByTag = function(tag){
+	eventmanager.detachAllOnceByTag = function(tag){
 		var eventsdel =
 			[];
 		var event, detach, o, tg, i;
@@ -230,7 +230,7 @@ var EventManager = (function($){
 	 * Detach all once triggable events by tags
 	 * @param tags
 	 */
-	this.detachAllOnceByTags = function(tags){
+	eventmanager.detachAllOnceByTags = function(tags){
 		var tag;
 		for(tag in tags){
 			eventmanager.detachAllOnceByTag(tags[tag]);
@@ -242,7 +242,7 @@ var EventManager = (function($){
 	 * Detach by tag
 	 * @param tag
 	 */
-	this.detachByTag = function(tag){
+	eventmanager.detachByTag = function(tag){
 		var eventsdel =
 			[];
 		var event, detach, o, tg, i;
@@ -283,7 +283,7 @@ var EventManager = (function($){
 	 * Detach by tags
 	 * @param tags
 	 */
-	this.detachByTags = function(tags){
+	eventmanager.detachByTags = function(tags){
 		var tag;
 		for(tag in tags){
 			eventmanager.detachByTag(tags[tag]);
@@ -291,7 +291,7 @@ var EventManager = (function($){
 	};
 
 
-	return this;
+	return eventmanager;
 }(jQuery));
 (function($){
 	'use strict';
