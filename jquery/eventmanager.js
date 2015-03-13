@@ -3,7 +3,8 @@
  * @author Martin Lonsky (visitek@gmail.com)
  * @link https://github.com/visitek/eventmanager
  */
-var EventManager = function(){
+var EventManager = (function($){
+	'use strict';
 	var eventmanager = this;
 	var listeners = {};
 	var debug = false;
@@ -18,23 +19,45 @@ var EventManager = function(){
 
 
 	/**
-	 * Attach event
-	 * @param string event
-	 * @param function callback
-	 * @param bool once
-	 * @param string|array tag
-	 * @param int priority
+	 * attach
+	 * @param event
+	 * @param callback
+	 * @param once
+	 * @param tag
+	 * @param priority
+	 * @param stop_propagation
 	 */
-	this.attach = function(event, callback, once, tag, priority){
-		if(typeof(listeners[event]) == 'undefined'){
+	this.attach = function(event, callback, once, tag, priority, stop_propagation){
+		var singleton = false;
+		if(typeof callback === 'object'){
+			once = callback.once;
+			tag = callback.tag;
+			priority = callback.priority;
+			stop_propagation = callback.stop_propagation;
+			singleton = callback.singleton === true;
+			callback = callback.callback;
+		}
+		if(listeners[event] === undefined){
 			listeners[event] =
 				[];
 		}
+		if(singleton === true){
+			var i;
+			for(i in listeners[event]){
+				if(listeners[event][i].callback.toString() === callback.toString()){
+					if(debug){
+						console.log('singleton_skipped:' + event + '(' + callback.toString().length + ', ' + once + ', ' + priority + ')');
+					}
+					return;
+				}
+			}
+		}
 		listeners[event][listeners[event].length] = {
-			callback : callback,
-			once     : typeof(once) != 'undefined' ? once : false,
-			tag      : typeof(tag) != 'undefined' ? tag : false,
-			priority : typeof(priority) != 'undefined' ? priority : 0
+			callback         : callback,
+			once             : once !== undefined ? once : false,
+			tag              : tag !== undefined ? tag : false,
+			priority         : priority !== undefined ? priority : 0,
+			stop_propagation : stop_propagation !== undefined ? stop_propagation : false
 		};
 		listeners[event].sort(function(a, b){
 			return b.priority - a.priority;
@@ -47,10 +70,10 @@ var EventManager = function(){
 
 	/**
 	 * detach
-	 * @param string event
-	 * @param offset item
+	 * @param event
+	 * @param item
 	 */
-	var _detach = function(event, item){
+	var detachEvent = function(event, item){
 		listeners[event].splice(item, 1);
 		if(debug){
 			console.log('detached:' + event);
@@ -60,28 +83,48 @@ var EventManager = function(){
 
 	/**
 	 * Trigger event
-	 * @param string event
+	 * @param event
 	 */
 	this.trigger = function(event){
-		if(typeof(listeners[event]) != 'undefined'){
+		if(listeners[event] !== undefined){
+			if(debug){
+				console.log('trigger:' + event);
+			}
 			var detach =
 				[];
-			for(var item in listeners[event]){
+			var stoppped = false;
+			var item, args, arg;
+			for(item in listeners[event]){
 				try {
-					var args =
+					args =
 						[];
-					for(var arg in arguments){
-						if(arg == 0){
+					for(arg in arguments){
+						if(arg === '0'){
 							continue;
 						}
 						args[args.length] = arguments[arg];
 					}
-					if(debug){
-						console.log('trigger:' + event + '(' + listeners[event][item].callback.toString().length + ')');
+					if(!stoppped){
+						if(debug){
+							console.log('triggered:' + event + '(' + listeners[event][item].callback.toString().length + ')');
+						}
+						try {
+							listeners[event][item].callback.apply(undefined, args);
+						}
+						catch(e){
+							$.Errors.throw(e);
+						}
 					}
-					listeners[event][item].callback.apply(undefined, args);
+					else {
+						if(debug){
+							console.log('stopped:' + event + '(' + listeners[event][item].callback.toString().length + ')');
+						}
+					}
 					if(listeners[event][item].once){
 						detach[detach.length] = item;
+					}
+					if(listeners[event][item].stop_propagation){
+						stoppped = true;
 					}
 				}
 				catch(e){
@@ -89,28 +132,35 @@ var EventManager = function(){
 				}
 			}
 			detach = detach.reverse();
-			for(var i in detach){
-				_detach(event, detach[i]);
+			var i;
+			for(i in detach){
+				detachEvent(event, detach[i]);
 			}
-			if(listeners[event].length == 0){
+			if(listeners[event].length === 0){
 				delete(listeners[event]);
+			}
+		}
+		else {
+			if(debug){
+				console.log('no-listener:' + event);
 			}
 		}
 	};
 
 	/**
 	 * Detach all once triggable events
-	 * @param mixed preg Reg expression
+	 * @param preg
 	 */
 	this.detachAllOnce = function(preg){
-		eventsdel =
+		var eventsdel =
 			[];
-		for(var event in listeners){
-			var detach =
+		var detach, event, o, i;
+		for(event in listeners){
+			detach =
 				[];
-			for(var o in listeners[event]){
+			for(o in listeners[event]){
 				if(listeners[event][o].once){
-					if(typeof(preg) == 'undefined'){
+					if(preg === undefined){
 						detach[detach.length] = o;
 					}
 					else if((new RegExp(preg)).test(event)){
@@ -119,14 +169,15 @@ var EventManager = function(){
 				}
 			}
 			detach = detach.reverse();
-			for(var i in detach){
-				_detach(event, detach[i]);
+			for(i in detach){
+				detachEvent(event, detach[i]);
 			}
-			if(listeners[event].length == 0){
+			if(listeners[event].length === 0){
 				eventsdel[eventsdel.length] = event;
 			}
 		}
-		for(var e in eventsdel){
+		var e;
+		for(e in eventsdel){
 			delete(eventsdel[e]);
 		}
 	};
@@ -134,24 +185,25 @@ var EventManager = function(){
 
 	/**
 	 * Detach all once triggable events by tag
-	 * @param string tag
+	 * @param tag
 	 */
 	this.detachAllOnceByTag = function(tag){
-		eventsdel =
+		var eventsdel =
 			[];
-		for(var event in listeners){
-			var detach =
+		var event, detach, o, tg, i;
+		for(event in listeners){
+			detach =
 				[];
-			for(var o in listeners[event]){
+			for(o in listeners[event]){
 				if(listeners[event][o].once){
-					if(typeof(listeners[event][o].tag) == 'string'){
-						if(listeners[event][o].tag == tag){
+					if(typeof(listeners[event][o].tag) === 'string'){
+						if(listeners[event][o].tag === tag){
 							detach[detach.length] = o;
 						}
 					}
-					else if(typeof(listeners[event][o].tag) == 'object'){
-						for(var tg in listeners[event][o].tag){
-							if(listeners[event][o].tag[tg] == tag){
+					else if(typeof(listeners[event][o].tag) === 'object'){
+						for(tg in listeners[event][o].tag){
+							if(listeners[event][o].tag[tg] === tag){
 								detach[detach.length] = o;
 								break;
 							}
@@ -160,14 +212,15 @@ var EventManager = function(){
 				}
 			}
 			detach = detach.reverse();
-			for(var i in detach){
-				_detach(event, detach[i]);
+			for(i in detach){
+				detachEvent(event, detach[i]);
 			}
-			if(listeners[event].length == 0){
+			if(listeners[event].length === 0){
 				eventsdel[eventsdel.length] = event;
 			}
 		}
-		for(var e in eventsdel){
+		var e;
+		for(e in eventsdel){
 			delete(eventsdel[e]);
 		}
 	};
@@ -175,10 +228,11 @@ var EventManager = function(){
 
 	/**
 	 * Detach all once triggable events by tags
-	 * @param array tags
+	 * @param tags
 	 */
 	this.detachAllOnceByTags = function(tags){
-		for(var tag in tags){
+		var tag;
+		for(tag in tags){
 			eventmanager.detachAllOnceByTag(tags[tag]);
 		}
 	};
@@ -186,23 +240,24 @@ var EventManager = function(){
 
 	/**
 	 * Detach by tag
-	 * @param string tag
+	 * @param tag
 	 */
 	this.detachByTag = function(tag){
-		eventsdel =
+		var eventsdel =
 			[];
-		for(var event in listeners){
-			var detach =
+		var event, detach, o, tg, i;
+		for(event in listeners){
+			detach =
 				[];
-			for(var o in listeners[event]){
-				if(typeof(listeners[event][o].tag) == 'string'){
-					if(listeners[event][o].tag == tag){
+			for(o in listeners[event]){
+				if(typeof(listeners[event][o].tag) === 'string'){
+					if(listeners[event][o].tag === tag){
 						detach[detach.length] = o;
 					}
 				}
-				else if(typeof(listeners[event][o].tag) == 'object'){
-					for(var tg in listeners[event][o].tag){
-						if(listeners[event][o].tag[tg] == tag){
+				else if(typeof(listeners[event][o].tag) === 'object'){
+					for(tg in listeners[event][o].tag){
+						if(listeners[event][o].tag[tg] === tag){
 							detach[detach.length] = o;
 							break;
 						}
@@ -210,14 +265,15 @@ var EventManager = function(){
 				}
 			}
 			detach = detach.reverse();
-			for(var i in detach){
-				_detach(event, detach[i]);
+			for(i in detach){
+				detachEvent(event, detach[i]);
 			}
-			if(listeners[event].length == 0){
+			if(listeners[event].length === 0){
 				eventsdel[eventsdel.length] = event;
 			}
 		}
-		for(var e in eventsdel){
+		var e;
+		for(e in eventsdel){
 			delete(eventsdel[e]);
 		}
 	};
@@ -225,20 +281,19 @@ var EventManager = function(){
 
 	/**
 	 * Detach by tags
-	 * @param array tags
+	 * @param tags
 	 */
 	this.detachByTags = function(tags){
-		for(var tag in tags){
+		var tag;
+		for(tag in tags){
 			eventmanager.detachByTag(tags[tag]);
 		}
 	};
 
 
 	return this;
-}();
+}(jQuery));
 (function($){
-	/**
-	 * Event manager object
-	 */
+	'use strict';
 	$.EventManager = EventManager;
-})(jQuery);
+}(jQuery));
