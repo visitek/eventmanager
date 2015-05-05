@@ -4,20 +4,27 @@ jQuery eventmanager plugin
 
 Attach event
 --------
-	$.EventManager.attach(string EventId, function Callback [, bool OnlyOnce [, string|array Tag]]);
+	$.EventManager.attach(string EventId, object);
 
 	=> example
 
-	$.EventManager.attach('test', function(callbackparam){
-		//callback body
-		console.log(callbackparam.id);
-	}, false, ['Group1', 'Group2']);
-
-Next attached event will be triggered only once and then will be detached automatically
-
-	$.EventManager.attach('test', function(){
-    	//callback body
-    }, true);
+	$.EventManager.attach('test', {
+		callback: function(callbackparam){
+			//callback body
+			console.log(callbackparam);
+		},
+		once: true,				//default false
+		singleton: true,    	//default false
+		tag: ['Tag1'],			//default []
+		priority: 1000,			//default 1
+		stop_propagation: false //default false
+	});
+	
+callback: Function which is called when event is fired.
+singleton: Event listener with this function can be attached only once. Restriction against duplicate
+tag: Tags for multiple removing listeners by tags.
+priority: Priority of listener. We can prioritize one listener over another.
+stop_propagation: Prevent from executing next listeners for this EventId.
 
 Trigger event
 --------
