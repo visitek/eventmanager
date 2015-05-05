@@ -3,8 +3,7 @@
  * @author Martin Lonsky (visitek@gmail.com)
  * @link https://github.com/visitek/eventmanager
  */
-var EventManager = function($){
-	'use strict';
+var EventManager = function(){
 	var eventmanager = {};
 	var listeners = {};
 	var debug = false;
@@ -52,18 +51,20 @@ var EventManager = function($){
 				}
 			}
 		}
-		listeners[event][listeners[event].length] = {
+		var attach = {
 			callback         : callback,
 			once             : once !== undefined ? once : false,
 			tag              : tag !== undefined ? tag : false,
 			priority         : priority !== undefined ? priority : 0,
 			stop_propagation : stop_propagation !== undefined ? stop_propagation : false
 		};
+		listeners[event][listeners[event].length] = attach;
 		listeners[event].sort(function(a, b){
 			return b.priority - a.priority;
 		});
 		if(debug){
-			console.log('attached:' + event + '(' + callback.toString().length + ', ' + once + ', ' + priority + ')');
+			console.log('%c attached:' + event + ' ', 'background: #222; color: #bada55');
+			console.log(attach);
 		}
 	};
 
@@ -88,7 +89,7 @@ var EventManager = function($){
 	eventmanager.trigger = function(event){
 		if(listeners[event] !== undefined){
 			if(debug){
-				console.log('trigger:' + event);
+				console.log('%c trigger:' + event + ' ', 'color: #E11B22');
 			}
 			var detach =
 				[];
@@ -106,13 +107,14 @@ var EventManager = function($){
 					}
 					if(!stoppped){
 						if(debug){
-							console.log('triggered:' + event + '(' + listeners[event][item].callback.toString().length + ')');
+							console.log('%c triggered:' + event + ' ', 'background: #222; color: #FCCA7C');
+							console.log(listeners[event][item]);
 						}
 						try {
 							listeners[event][item].callback.apply(undefined, args);
 						}
 						catch(e){
-							$.Errors.throw(e);
+							$.Errors.throwError(e);
 						}
 					}
 					else {
@@ -288,6 +290,15 @@ var EventManager = function($){
 		for(tag in tags){
 			eventmanager.detachByTag(tags[tag]);
 		}
+	};
+
+
+	/**
+	 * Get new eventmanager
+	 * @returns {EventManager}
+	 */
+	eventmanager.clone = function(){
+		return new EventManager();
 	};
 
 
