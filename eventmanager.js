@@ -3,10 +3,9 @@
   (function($) {
     var EventManager;
     EventManager = function() {
-      var debug, detachEvent, eventmanager, hold, listeners;
+      var debug, detachEvent, eventmanager, listeners;
       debug = false;
       listeners = {};
-      hold = {};
       eventmanager = this;
 
       /*

@@ -2,7 +2,6 @@
   EventManager = ->
     debug = false
     listeners = {}
-    hold = {}
     eventmanager = this
 
 
