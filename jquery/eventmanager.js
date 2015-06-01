@@ -156,8 +156,6 @@
 		 * @param preg
 		 */
 		eventmanager.detachAllOnce = function(preg){
-			var eventsdel =
-				[];
 			var detach, event, o, i;
 			for(event in listeners){
 				detach =
@@ -176,13 +174,6 @@
 				for(i in detach){
 					detachEvent(event, detach[i]);
 				}
-				if(listeners[event].length === 0){
-					eventsdel[eventsdel.length] = event;
-				}
-			}
-			var e;
-			for(e in eventsdel){
-				delete(eventsdel[e]);
 			}
 		};
 
@@ -192,8 +183,6 @@
 		 * @param tag
 		 */
 		eventmanager.detachAllOnceByTag = function(tag){
-			var eventsdel =
-				[];
 			var event, detach, o, tg, i;
 			for(event in listeners){
 				detach =
@@ -219,13 +208,6 @@
 				for(i in detach){
 					detachEvent(event, detach[i]);
 				}
-				if(listeners[event].length === 0){
-					eventsdel[eventsdel.length] = event;
-				}
-			}
-			var e;
-			for(e in eventsdel){
-				delete(eventsdel[e]);
 			}
 		};
 
@@ -247,8 +229,6 @@
 		 * @param tag
 		 */
 		eventmanager.detachByTag = function(tag){
-			var eventsdel =
-				[];
 			var event, detach, o, tg, i;
 			for(event in listeners){
 				detach =
@@ -272,13 +252,6 @@
 				for(i in detach){
 					detachEvent(event, detach[i]);
 				}
-				if(listeners[event].length === 0){
-					eventsdel[eventsdel.length] = event;
-				}
-			}
-			var e;
-			for(e in eventsdel){
-				delete(eventsdel[e]);
 			}
 		};
 
