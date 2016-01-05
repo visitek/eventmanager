@@ -1,6 +1,7 @@
-jQuery EventManager
+EventManager
 ============
-jQuery eventmanager plugin
+jQuery, NodeJS, ... eventmanager
+This library is not absolutely independent on any framework
 
 Attach event
 --------
