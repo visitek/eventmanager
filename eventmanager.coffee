@@ -24,13 +24,17 @@
     # @param string          event
     # @param callable|object callback
     ###
-    @attach = (event, callback)->
+    @attach = (event, callback, once = false, tag = [], priority = undefined, singleton = false)->
       singleton = false
-      tag = [event]
+      tag.push event;
       if typeof callback == 'object'
         once = callback.once;
         if callback.tag
-          tag = tag.push callback.tag;
+          if typeof callback.tag == 'string'
+            tag = tag.push callback.tag;
+          else
+            for i, tg of callback.tag
+              tag = tag.push tg;
         priority = callback.priority;
         stop_propagation = callback.stop_propagation;
         singleton = if callback.singleton then callback.singleton else false;
