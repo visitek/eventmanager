@@ -44,6 +44,9 @@
           singleton = false;
         }
         singleton = false;
+        if (typeof tag !== 'array') {
+          tag = [tag];
+        }
         tag.push(event);
         if (typeof callback === 'object') {
           once = callback.once;
