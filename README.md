@@ -23,6 +23,8 @@ Attach event
 	
 callback: Function which is called when event is fired.
 
+once: Callback is fired only once a then is removed.
+
 singleton: Event listener with this function can be attached only once. Restriction against duplicate
 
 tag: Tags for multiple removing listeners by tags.
@@ -30,6 +32,10 @@ tag: Tags for multiple removing listeners by tags.
 priority: Priority of listener. We can prioritize one listener over another.
 
 stop_propagation: Prevent from executing next listeners for this EventId.
+
+Back compatibility:
+(event, callback, once = false, tag = [], priority = undefined, singleton = false)
+
 
 Trigger event
 --------
