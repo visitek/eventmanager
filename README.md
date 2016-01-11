@@ -33,8 +33,8 @@ priority: Priority of listener. We can prioritize one listener over another.
 
 stop_propagation: Prevent from executing next listeners for this EventId.
 
-Back compatibility:
-(event, callback, once = false, tag = [], priority = undefined, singleton = false)
+#Back compatibility:
+attach(event, callback, once = false, tag = [], priority = undefined, singleton = false)
 
 
 Trigger event
